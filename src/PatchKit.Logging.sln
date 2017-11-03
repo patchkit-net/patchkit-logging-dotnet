@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.0.0
+MinimumVisualStudioVersion = 10.0.0.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{A120ED63-B426-4ABA-B29B-4875443A6D9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatchKit.Logging", "PatchKit.Logging\PatchKit.Logging.csproj", "{C2197D71-3149-4A2F-9D3F-F0134790894D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A120ED63-B426-4ABA-B29B-4875443A6D9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A120ED63-B426-4ABA-B29B-4875443A6D9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A120ED63-B426-4ABA-B29B-4875443A6D9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A120ED63-B426-4ABA-B29B-4875443A6D9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2197D71-3149-4A2F-9D3F-F0134790894D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2197D71-3149-4A2F-9D3F-F0134790894D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2197D71-3149-4A2F-9D3F-F0134790894D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2197D71-3149-4A2F-9D3F-F0134790894D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
