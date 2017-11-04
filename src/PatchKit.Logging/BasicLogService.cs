@@ -38,7 +38,7 @@ namespace PatchKit.Logging
                 {
                     writer.Write(text);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     // ignored because we cannot let Log throw any exceptions
                 }
