@@ -23,7 +23,7 @@ namespace PatchKit.Logging
             var stackTrace = new StackTrace();
             var dateTime = DateTime.Now;
 
-            var messageContext = new MessageContext(stackTrace.GetFrame(1), dateTime);
+            var messageContext = new MessageContext(stackTrace, dateTime);
 
             Write(message, messageContext);
         }

@@ -5,10 +5,13 @@ namespace PatchKit.Logging
 {
     public class SimpleMessageFormatter : IMessageFormatter
     {
+        private static Type _loggerType = typeof(ILogger);
+        private static Type _loggerExtensionsType = typeof(LoggerExtensions);
+        
         public string Format(Message message, MessageContext messageContext)
         {
             var output =
-                $"{GetDateTimeText(messageContext.DateTime)} {GetMessageTypeText(message.Type)} {GetCallerNameText(messageContext.StackFrame)} {message.Description}";
+                $"{GetDateTimeText(messageContext.DateTime)} {GetMessageTypeText(message.Type)} {GetCallerNameText(messageContext.StackTrace)} {message.Description}";
 
             var exceptionInfo = GetExceptionInfo(message);
 
@@ -24,7 +27,24 @@ namespace PatchKit.Logging
         {
             return message.Exception == null
                 ? null
-                : $"{message.Exception.GetType()}: {message.Exception.Message}\nStack trace: {message.Exception.StackTrace}";
+                : $"{message.Exception.GetType()}: {message.Exception.Message}\n{message.Exception.StackTrace}";
+        }
+
+        private static string GetCallerNameText(StackTrace stackTrace)
+        {
+            for (int i = 1; i < stackTrace.FrameCount; i++)
+            {
+                var stackFrame = stackTrace.GetFrame(i);
+                var declaringType = stackFrame?.GetMethod()?.DeclaringType;
+                if (declaringType != null &&
+                    !_loggerType.IsAssignableFrom(declaringType) &&
+                    _loggerExtensionsType != declaringType)
+                {
+                    return GetCallerNameText(stackFrame);
+                }
+            }
+            
+            return "<unknown caller>";
         }
 
         private static string GetCallerNameText(StackFrame stackFrame)
