@@ -24,7 +24,7 @@ namespace PatchKit.Logging
             var dateTime = DateTime.Now;
 
             var messageContext = new MessageContext(stackTrace.GetFrame(1), dateTime);
-            
+
             Write(message, messageContext);
         }
 

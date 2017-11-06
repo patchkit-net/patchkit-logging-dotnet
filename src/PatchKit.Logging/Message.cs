@@ -11,11 +11,11 @@ namespace PatchKit.Logging
             Type = type;
             Exception = exception;
         }
-        
+
         public string Description { get; set; }
 
         public MessageType Type { get; set; }
-        
+
         public Exception Exception { get; set; }
     }
 }

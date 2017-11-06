@@ -7,7 +7,8 @@ namespace PatchKit.Logging
     {
         public string Format(Message message, MessageContext messageContext)
         {
-            var output = $"{GetDateTimeText(messageContext.DateTime)} {GetMessageTypeText(message.Type)} {GetCallerNameText(messageContext.StackFrame)} {message.Description}";
+            var output =
+                $"{GetDateTimeText(messageContext.DateTime)} {GetMessageTypeText(message.Type)} {GetCallerNameText(messageContext.StackFrame)} {message.Description}";
 
             var exceptionInfo = GetExceptionInfo(message);
 
@@ -25,7 +26,7 @@ namespace PatchKit.Logging
                 ? null
                 : $"{message.Exception.GetType()}: {message.Exception.Message}\nStack trace: {message.Exception.StackTrace}";
         }
-        
+
         private static string GetCallerNameText(StackFrame stackFrame)
         {
             var method = stackFrame?.GetMethod();

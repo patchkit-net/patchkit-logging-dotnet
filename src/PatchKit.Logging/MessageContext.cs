@@ -12,7 +12,7 @@ namespace PatchKit.Logging
         }
 
         public StackFrame StackFrame { get; set; }
-        
+
         public DateTime DateTime { get; set; }
     }
 }

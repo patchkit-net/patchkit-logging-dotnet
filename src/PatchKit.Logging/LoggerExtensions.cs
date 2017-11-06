@@ -13,17 +13,17 @@ namespace PatchKit.Logging
         {
             @this.Log(description, MessageType.Trace, exception);
         }
-        
+
         public static void LogDebug(this ILogger @this, string description, Exception exception = null)
         {
             @this.Log(description, MessageType.Debug, exception);
         }
-        
+
         public static void LogWarning(this ILogger @this, string description, Exception exception = null)
         {
             @this.Log(description, MessageType.Warning, exception);
         }
-        
+
         public static void LogError(this ILogger @this, string description, Exception exception = null)
         {
             @this.Log(description, MessageType.Error, exception);

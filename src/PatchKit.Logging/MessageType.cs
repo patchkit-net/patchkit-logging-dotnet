@@ -9,6 +9,7 @@
         /// * Downloaded file size
         /// </summary>
         Trace,
+
         /// <summary>
         /// Regular operation description.
         /// Examples:
@@ -17,6 +18,7 @@
         /// * "Unarchiving has been finished."
         /// </summary>
         Debug,
+
         /// <summary>
         /// Issue that is recoverable (in scope of current operation).
         /// Examples:
@@ -26,6 +28,7 @@
         /// * "Main server didn't respond. Falling back to cache servers..."
         /// </summary>
         Warning,
+
         /// <summary>
         /// Issue that is not recoverable (in scope of current operation).
         /// Examples:
