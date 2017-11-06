@@ -7,7 +7,13 @@ namespace PatchKit.Logging
     public class DefaultLogger : ILogger
     {
         private readonly HashSet<IMessageWriter> _writers = new HashSet<IMessageWriter>();
+        private readonly ILogStackFrameLocator _logStackFrameLocator;
 
+        public DefaultLogger(ILogStackFrameLocator logStackFrameLocator)
+        {
+            _logStackFrameLocator = logStackFrameLocator;
+        }
+        
         public void AddWriter(IMessageWriter writer)
         {
             _writers.Add(writer);
@@ -18,12 +24,14 @@ namespace PatchKit.Logging
             _writers.Remove(writer);
         }
 
+        [IgnoreLogStackTrace]
         public void Log(Message message)
         {
-            var stackTrace = new StackTrace();
             var dateTime = DateTime.Now;
-
-            var messageContext = new MessageContext(stackTrace, dateTime);
+            var stackTrace = new StackTrace();
+            var stackFrame = _logStackFrameLocator.Locate(stackTrace);
+            
+            var messageContext = new MessageContext(stackFrame, dateTime);
 
             Write(message, messageContext);
         }

@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultLogStackFrameLocatorTest.cs" />
     <Compile Include="SimpleMessageFormatterTests.cs" />
     <Compile Include="DefaultLoggerTests.cs" />
   </ItemGroup>

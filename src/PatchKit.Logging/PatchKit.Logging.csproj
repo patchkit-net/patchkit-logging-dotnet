@@ -39,6 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultLogStackFrameLocator.cs" />
+    <Compile Include="IgnoreLogStackTraceAttribute.cs" />
+    <Compile Include="ILogStackFrameLocator.cs" />
     <Compile Include="SimpleMessageFormatter.cs" />
     <Compile Include="DefaultLogger.cs" />
     <Compile Include="DummyLogger.cs" />

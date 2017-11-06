@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
 using PatchKit.Logging;
 
@@ -10,7 +12,10 @@ namespace Test
     {
         private static DefaultLogger CreateInstance()
         {
-            return new DefaultLogger();
+            var logStackFrameLocator = Substitute.For<ILogStackFrameLocator>();
+            logStackFrameLocator.Locate(Arg.Any<StackTrace>()).ReturnsNull();
+            
+            return new DefaultLogger(logStackFrameLocator);
         }
 
         [Test]

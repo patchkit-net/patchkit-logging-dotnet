@@ -5,13 +5,13 @@ namespace PatchKit.Logging
 {
     public struct MessageContext
     {
-        public MessageContext(StackTrace stackTrace, DateTime dateTime)
+        public MessageContext(StackFrame stackFrame, DateTime dateTime)
         {
-            StackTrace = stackTrace;
+            StackFrame = stackFrame;
             DateTime = dateTime;
         }
 
-        public StackTrace StackTrace { get; set; }
+        public StackFrame StackFrame { get; set; }
 
         public DateTime DateTime { get; set; }
     }
