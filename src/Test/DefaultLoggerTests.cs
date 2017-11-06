@@ -6,53 +6,55 @@ using PatchKit.Logging;
 namespace Test
 {
     [TestFixture]
-    public class LogServiceTests
+    public class DefaultLoggerTests
     {
-        private static ILogService CreateInstance()
+        private static DefaultLogger CreateInstance()
         {
-            return new BasicLogService();
+            return new DefaultLogger();
         }
 
         [Test]
         public void Log_ForAnyMessage_AddedWritersAreRequestedToWriteText()
         {
             var logService = CreateInstance();
-            var logWriter = Substitute.For<ILogWriter>();
+            var logWriter = Substitute.For<IMessageWriter>();
 
             logService.AddWriter(logWriter);
 
-            logService.Log(new LogMessage("Test", LogMessageType.Debug));
+            var message = new Message("Test", MessageType.Debug);
             
-            logWriter.Received(1).Write(Arg.Any<string>());
+            logService.Log(message);
+            
+            logWriter.Received(1).Write(Arg.Is(message), Arg.Any<MessageContext>());
         }
 
         [Test]
         public void Log_ForAnyMessage_RemovedWritersAreNotRequestedToWriteText()
         {
             var logService = CreateInstance();
-            var logWriter = Substitute.For<ILogWriter>();
+            var logWriter = Substitute.For<IMessageWriter>();
 
             logService.AddWriter(logWriter);
             logService.RemoveWriter(logWriter);
 
-            logService.Log(new LogMessage("Test", LogMessageType.Debug));
+            logService.Log(new Message("Test", MessageType.Debug));
             
-            logWriter.DidNotReceive().Write(Arg.Any<string>());
+            logWriter.DidNotReceive().Write(Arg.Any<Message>(), Arg.Any<MessageContext>());
         }
 
         [Test]
         public void Log_ForAnyMessage_ExceptionCausedByWriterIsNotRethrown()
         {
             var logService = CreateInstance();
-            var logWriter = Substitute.For<ILogWriter>();
+            var logWriter = Substitute.For<IMessageWriter>();
 
             logWriter
-                .When(x => x.Write(Arg.Any<string>()))
+                .When(x => x.Write(Arg.Any<Message>(), Arg.Any<MessageContext>()))
                 .Do(x => { throw new Exception(); });
             
             logService.AddWriter(logWriter);
             
-            Assert.DoesNotThrow(() => logService.Log(new LogMessage("Test", LogMessageType.Debug)));
+            Assert.DoesNotThrow(() => logService.Log(new Message("Test", MessageType.Debug)));
         }
     }
 }

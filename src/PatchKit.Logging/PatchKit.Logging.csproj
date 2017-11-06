@@ -39,15 +39,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicLogMessageFormatter.cs" />
-    <Compile Include="BasicLogService.cs" />
-    <Compile Include="DummyLogService.cs" />
-    <Compile Include="ILogMessageFormatter.cs" />
-    <Compile Include="ILogService.cs" />
-    <Compile Include="ILogWriter.cs" />
-    <Compile Include="LogMessage.cs" />
-    <Compile Include="LogMessageType.cs" />
-    <Compile Include="LogServiceExtensions.cs" />
+    <Compile Include="SimpleMessageFormatter.cs" />
+    <Compile Include="DefaultLogger.cs" />
+    <Compile Include="DummyLogger.cs" />
+    <Compile Include="IMessageFormatter.cs" />
+    <Compile Include="ILogger.cs" />
+    <Compile Include="IMessageWriter.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="MessageContext.cs" />
+    <Compile Include="MessageType.cs" />
+    <Compile Include="LoggerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -3,9 +3,9 @@ using System.Runtime.InteropServices;
 
 namespace PatchKit.Logging
 {
-    public struct LogMessage
+    public struct Message
     {
-        public LogMessage(string description, LogMessageType type, Exception exception = null)
+        public Message(string description, MessageType type, Exception exception = null)
         {
             Description = description;
             Type = type;
@@ -14,7 +14,7 @@ namespace PatchKit.Logging
         
         public string Description { get; set; }
 
-        public LogMessageType Type { get; set; }
+        public MessageType Type { get; set; }
         
         public Exception Exception { get; set; }
     }

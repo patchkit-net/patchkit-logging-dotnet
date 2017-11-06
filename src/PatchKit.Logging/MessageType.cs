@@ -1,6 +1,6 @@
 ﻿namespace PatchKit.Logging
 {
-    public enum LogMessageType
+    public enum MessageType
     {
         /// <summary>
         /// Very detailed description about operation.

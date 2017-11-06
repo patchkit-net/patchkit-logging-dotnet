@@ -51,8 +51,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicLogMessageFormatterTests.cs" />
-    <Compile Include="LogServiceTests.cs" />
+    <Compile Include="SimpleMessageFormatterTests.cs" />
+    <Compile Include="DefaultLoggerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties" />

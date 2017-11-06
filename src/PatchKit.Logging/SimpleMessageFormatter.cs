@@ -3,11 +3,11 @@ using System.Diagnostics;
 
 namespace PatchKit.Logging
 {
-    public class BasicLogMessageFormatter
+    public class SimpleMessageFormatter : IMessageFormatter
     {
-        public string Format(LogMessage message, DateTime dateTime, StackTrace stackTrace)
+        public string Format(Message message, MessageContext messageContext)
         {
-            var output = $"{GetDateTimeText(dateTime)} {GetMessageTypeText(message.Type)} {GetCallerNameText(stackTrace)} {message.Description}";
+            var output = $"{GetDateTimeText(messageContext.DateTime)} {GetMessageTypeText(message.Type)} {GetCallerNameText(messageContext.StackFrame)} {message.Description}";
 
             var exceptionInfo = GetExceptionInfo(message);
 
@@ -19,18 +19,16 @@ namespace PatchKit.Logging
             return output;
         }
 
-        private static string GetExceptionInfo(LogMessage message)
+        private static string GetExceptionInfo(Message message)
         {
             return message.Exception == null
                 ? null
                 : $"{message.Exception.GetType()}: {message.Exception.Message}\nStack trace: {message.Exception.StackTrace}";
         }
         
-        private static string GetCallerNameText(StackTrace stackTrace)
+        private static string GetCallerNameText(StackFrame stackFrame)
         {
-            var frame = stackTrace.GetFrame(0);
-
-            var method = frame?.GetMethod();
+            var method = stackFrame?.GetMethod();
             var declaringType = method?.DeclaringType;
 
             return declaringType != null
@@ -43,17 +41,17 @@ namespace PatchKit.Logging
             return dateTime.ToString("yyyy-MM-dd HH:mm:ss.fff zzz");
         }
 
-        private static string GetMessageTypeText(LogMessageType messageType)
+        private static string GetMessageTypeText(MessageType messageType)
         {
             switch (messageType)
             {
-                case LogMessageType.Trace:
+                case MessageType.Trace:
                     return "[ TRACE ]";
-                case LogMessageType.Debug:
+                case MessageType.Debug:
                     return "[ DEBUG ]";
-                case LogMessageType.Warning:
+                case MessageType.Warning:
                     return "[WARNING]";
-                case LogMessageType.Error:
+                case MessageType.Error:
                     return "[ ERROR ]";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(messageType), messageType, null);
