@@ -1,6 +1,5 @@
 /src/PatchKit.Logging/obj/
 /src/PatchKit.Logging/bin/
-/src/PatchKit.Logging/*.nupkg
 /src/Test/obj/
 /src/Test/bin/
 /src/packages/
