@@ -17,6 +17,7 @@
     <PackageReleaseNotes>https://github.com/patchkit-net/patchkit-logging-dotnet/releases</PackageReleaseNotes>
     <PackageTags>patchkit logging logs upsoft</PackageTags>
     <BeforePack>_RetrieveAssemblyVersion</BeforePack>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -45,16 +46,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultLogStackFrameLocator.cs" />
-    <Compile Include="IgnoreLogStackTraceAttribute.cs" />
-    <Compile Include="ILogStackFrameLocator.cs" />
+    <Compile Include="DefaultMessageSourceStackLocator.cs" />
+    <Compile Include="IgnoreMessageSourceStackAttribute.cs" />
+    <Compile Include="IMessagesStream.cs" />
+    <Compile Include="IMessagesStreamObserver.cs" />
+    <Compile Include="IMessageSourceStackLocator.cs" />
+    <Compile Include="MessageSource.cs" />
+    <Compile Include="MessagesStreamSubject.cs" />
     <Compile Include="Properties\VersionInfo.cs" />
     <Compile Include="SimpleMessageFormatter.cs" />
     <Compile Include="DefaultLogger.cs" />
     <Compile Include="DummyLogger.cs" />
     <Compile Include="IMessageFormatter.cs" />
     <Compile Include="ILogger.cs" />
-    <Compile Include="IMessageWriter.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageContext.cs" />
     <Compile Include="MessageType.cs" />
@@ -69,6 +73,17 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\CHANGELOG.md">
+      <Link>CHANGELOG.md</Link>
+    </Content>
+    <Content Include="..\..\LICENSE">
+      <Link>LICENSE</Link>
+    </Content>
+    <Content Include="..\..\README.md">
+      <Link>README.md</Link>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <UsingTask TaskName="GetAssemblyPackageData" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v12.0.dll">
     <ParameterGroup>
@@ -79,12 +94,11 @@
       <Copyright ParameterType="System.String" Output="true" />
     </ParameterGroup>
     <Task>
-      <Reference Include="System"/>
-      <Reference Include="System.Reflection"/>
-      <Using Namespace="System.Reflection"/>
-      <Using Namespace="System.Diagnostics"/>
-      <Code Type="Fragment" Language="cs">
-<![CDATA[
+      <Reference Include="System" />
+      <Reference Include="System.Reflection" />
+      <Using Namespace="System.Reflection" />
+      <Using Namespace="System.Diagnostics" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
 var assembly = Assembly.LoadFrom(AssemblyPath);
 var versionInfo = FileVersionInfo.GetVersionInfo(AssemblyPath);
 
@@ -99,16 +113,15 @@ PackageVersion = version;
 Authors = versionInfo.CompanyName;
 Description = versionInfo.FileDescription;
 Copyright = versionInfo.LegalCopyright;
-]]>
-      </Code>
+]]></Code>
     </Task>
   </UsingTask>
   <Target Name="_RetrieveAssemblyVersion" DependsOnTargets="Build">
     <GetAssemblyPackageData AssemblyPath="$(OutputPath)/$(AssemblyName).dll">
-      <Output PropertyName="PackageVersion" TaskParameter="PackageVersion"/>
-      <Output PropertyName="Authors" TaskParameter="Authors"/>
-      <Output PropertyName="Description" TaskParameter="Description"/>
-      <Output PropertyName="Copyright" TaskParameter="Copyright"/>
+      <Output PropertyName="PackageVersion" TaskParameter="PackageVersion" />
+      <Output PropertyName="Authors" TaskParameter="Authors" />
+      <Output PropertyName="Description" TaskParameter="Description" />
+      <Output PropertyName="Copyright" TaskParameter="Copyright" />
     </GetAssemblyPackageData>
   </Target>
   <Target Name="LocalPublishPackage" DependsOnTargets="Pack" Condition=" '$(Configuration)' == 'Debug' ">

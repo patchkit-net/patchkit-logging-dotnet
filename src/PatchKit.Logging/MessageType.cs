@@ -1,5 +1,8 @@
 ﻿namespace PatchKit.Logging
 {
+    /// <summary>
+    /// Type of message.
+    /// </summary>
     public enum MessageType
     {
         /// <summary>

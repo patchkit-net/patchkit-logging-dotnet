@@ -1,14 +1,18 @@
 ﻿using System;
-using System.Diagnostics;
 
 namespace PatchKit.Logging
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Simple message formatter.
+    /// </summary>
     public class SimpleMessageFormatter : IMessageFormatter
     {
+        /// <inheritdoc />
         public string Format(Message message, MessageContext messageContext)
         {
             var output =
-                $"{GetDateTimeText(messageContext.DateTime)} {GetMessageTypeText(message.Type)} {GetCallerNameText(messageContext.StackFrame)} {message.Description}";
+                $"{GetDateTimeText(messageContext.DateTime)} {GetMessageTypeText(message.Type)} {GetCallerNameText(messageContext.Source)} {message.Description}";
 
             var exceptionInfo = GetExceptionInfo(message);
 
@@ -27,14 +31,9 @@ namespace PatchKit.Logging
                 : $"{message.Exception.GetType()}: {message.Exception.Message}\n{message.Exception.StackTrace}";
         }
 
-        private static string GetCallerNameText(StackFrame stackFrame)
+        private static string GetCallerNameText(MessageSource source)
         {
-            var method = stackFrame?.GetMethod();
-            var declaringType = method?.DeclaringType;
-
-            return declaringType != null
-                ? $"<{declaringType.Name}::{method.Name}>"
-                : "<unknown caller>";
+            return $"<{source.Type?.Name ?? "unknown_type"}::{source.Method?.Name ?? "unknown_method"}>";
         }
 
         private static string GetDateTimeText(DateTime dateTime)

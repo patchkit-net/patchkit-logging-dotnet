@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using NUnit.Framework;
 using PatchKit.Logging;
+
+// ReSharper disable PossibleNullReferenceException
 
 namespace Test
 {
@@ -12,32 +13,35 @@ namespace Test
         public void TypeBracketWidth_ForAllTypes_ShouldBeTheSame()
         {
             var formatter = new SimpleMessageFormatter();
-            
+
             const string description = "Test";
-            var dateTime = new DateTime();
-            var stackFrame = new StackFrame();
-            
+            var context = new MessageContext(default(MessageSource), new DateTime());
+
             // only message type is different so all formatted texts should have same length
 
-            int width = formatter.Format(new Message(description, MessageType.Trace), new MessageContext(stackFrame ,dateTime)).Length;
-            Assert.AreEqual(width,
-                formatter.Format(new Message(description, MessageType.Debug), new MessageContext(stackFrame ,dateTime)).Length);
-            Assert.AreEqual(width,
-                formatter.Format(new Message(description, MessageType.Warning), new MessageContext(stackFrame ,dateTime)).Length);
-            Assert.AreEqual(width,
-                formatter.Format(new Message(description, MessageType.Error), new MessageContext(stackFrame ,dateTime)).Length);
+            int width = formatter.Format(new Message(description, MessageType.Trace, null), context).Length;
+
+            Assert.That(formatter.Format(new Message(description, MessageType.Debug, null), context).Length,
+                Is.EqualTo(width));
+
+            Assert.That(formatter.Format(new Message(description, MessageType.Warning, null), context).Length,
+                Is.EqualTo(width));
+
+            Assert.That(formatter.Format(new Message(description, MessageType.Error, null), context).Length,
+                Is.EqualTo(width));
         }
-        
+
         [Test]
-        public void TypeBracketWidth_ForNullStackFrame_ShouldInformAboutUnknownCallerMethod()
+        public void TypeBracketWidth_ForNullSourceTypeAndMethod_ShouldInformAboutUnknownSourceTypeAndMethod()
         {
             var formatter = new SimpleMessageFormatter();
-            
+
             const string description = "Test";
             var dateTime = new DateTime();
-            
-            var text = formatter.Format(new Message(description, MessageType.Trace), new MessageContext(null ,dateTime));
-            Assert.IsTrue(text.Contains("<unknown caller>"));
+
+            var text = formatter.Format(new Message(description, MessageType.Trace, null),
+                new MessageContext(default(MessageSource), dateTime));
+            Assert.That(text.Contains("<unknown_type::unknown_method>"));
         }
     }
 }

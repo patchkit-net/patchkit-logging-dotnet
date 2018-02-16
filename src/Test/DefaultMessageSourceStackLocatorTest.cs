@@ -1,15 +1,17 @@
 ﻿using System.Diagnostics;
 using NUnit.Framework;
 using PatchKit.Logging;
+// ReSharper disable PossibleNullReferenceException
+// ReSharper disable AssignNullToNotNullAttribute
 
 namespace Test
 {
     [TestFixture]
-    public class DefaultLogStackFrameLocatorTest
+    public class DefaultMessageSourceStackLocatorTest
     {
-        private static DefaultLogStackFrameLocator CreateInstance()
+        private static DefaultMessageSourceStackLocator CreateInstance()
         {
-            return new DefaultLogStackFrameLocator();
+            return new DefaultMessageSourceStackLocator();
         }
         
         private static StackTrace Func()
@@ -17,7 +19,7 @@ namespace Test
             return new StackTrace();
         }
         
-        [IgnoreLogStackTrace]
+        [IgnoreMessageSourceStack]
         private static StackTrace Func_Ignored()
         {
             return new StackTrace();
@@ -40,9 +42,10 @@ namespace Test
             
             var stackTrace = Func();
 
-            var stackFrame = locator.Locate(stackTrace);
-            
-            Assert.AreEqual("Func", stackFrame.GetMethod().Name);
+            var source = locator.Locate(stackTrace);
+
+            Assert.That(source.Method, Is.Not.Null);
+            Assert.That(source.Method.Name, Is.EqualTo("Func"));
         }
         
         [Test]
@@ -52,9 +55,10 @@ namespace Test
             
             var stackTrace = Func_Ignored();
 
-            var stackFrame = locator.Locate(stackTrace);
-            
-            Assert.AreNotEqual("Func_Ignored", stackFrame.GetMethod().Name);
+            var source = locator.Locate(stackTrace);
+
+            Assert.That(source.Method, Is.Not.Null);
+            Assert.That(source.Method.Name, Is.Not.EqualTo("Func_Ignored"));
         }
 
         [Test]
@@ -64,9 +68,10 @@ namespace Test
             
             var stackTrace = Func_CallingIgnored();
 
-            var stackFrame = locator.Locate(stackTrace);
-            
-            Assert.AreEqual("Func_CallingIgnored", stackFrame.GetMethod().Name);
+            var source = locator.Locate(stackTrace);
+
+            Assert.That(source.Method, Is.Not.Null);
+            Assert.That(source.Method.Name, Is.EqualTo("Func_CallingIgnored"));
         }
         
         [Test]
@@ -76,9 +81,10 @@ namespace Test
             
             var stackTrace = Func_CallingNormal();
 
-            var stackFrame = locator.Locate(stackTrace);
-            
-            Assert.AreEqual("Func", stackFrame.GetMethod().Name);
+            var source = locator.Locate(stackTrace);
+
+            Assert.That(source.Method, Is.Not.Null);
+            Assert.That(source.Method.Name, Is.EqualTo("Func"));
         }
     }
 }

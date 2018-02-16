@@ -1,21 +1,35 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 namespace PatchKit.Logging
 {
+    /// <summary>
+    /// Message.
+    /// </summary>
     public struct Message
     {
-        public Message(string description, MessageType type, Exception exception = null)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Message"/> struct.
+        /// </summary>
+        public Message(string description, MessageType type, Exception exception)
         {
             Description = description;
             Type = type;
             Exception = exception;
         }
 
-        public string Description { get; set; }
+        /// <summary>
+        /// Message description.
+        /// </summary>
+        public string Description { get; }
 
-        public MessageType Type { get; set; }
+        /// <summary>
+        /// Message type.
+        /// </summary>
+        public MessageType Type { get; }
 
-        public Exception Exception { get; set; }
+        /// <summary>
+        /// Associated exception.
+        /// </summary>
+        public Exception Exception { get; }
     }
 }

@@ -1,54 +1,54 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
+using JetBrains.Annotations;
 
 namespace PatchKit.Logging
 {
-    public class DefaultLogger : ILogger
+    /// <inheritdoc cref="ILogger" />
+    /// <inheritdoc cref="IMessagesStream" />
+    /// <summary>
+    /// Default implementation of <see cref="ILogger"/> which also implements <see cref="IMessagesStream"/>.
+    /// </summary>
+    public class DefaultLogger : ILogger, IMessagesStream
     {
-        private readonly HashSet<IMessageWriter> _writers = new HashSet<IMessageWriter>();
-        private readonly ILogStackFrameLocator _logStackFrameLocator;
+        [NotNull]
+        private readonly IMessageSourceStackLocator _messageSourceStackLocator;
 
-        public DefaultLogger(ILogStackFrameLocator logStackFrameLocator)
-        {
-            _logStackFrameLocator = logStackFrameLocator;
-        }
-        
-        public void AddWriter(IMessageWriter writer)
-        {
-            _writers.Add(writer);
-        }
+        [NotNull]
+        private readonly MessagesStreamSubject _subject = new MessagesStreamSubject();
 
-        public void RemoveWriter(IMessageWriter writer)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultLogger"/> class.
+        /// </summary>
+        /// <param name="messageSourceStackLocator"></param>
+        public DefaultLogger([NotNull] IMessageSourceStackLocator messageSourceStackLocator)
         {
-            _writers.Remove(writer);
+            _messageSourceStackLocator = messageSourceStackLocator ??
+                                         throw new ArgumentNullException(nameof(messageSourceStackLocator));
         }
 
-        [IgnoreLogStackTrace]
+        /// <inheritdoc />
+        [IgnoreMessageSourceStack]
         public void Log(Message message)
         {
             var dateTime = DateTime.Now;
             var stackTrace = new StackTrace();
-            var stackFrame = _logStackFrameLocator.Locate(stackTrace);
-            
-            var messageContext = new MessageContext(stackFrame, dateTime);
+            var source = _messageSourceStackLocator.Locate(stackTrace);
 
-            Write(message, messageContext);
+            var context = new MessageContext(source, dateTime);
+
+            _subject.OnNext(message, context);
         }
 
-        private void Write(Message message, MessageContext messageContext)
+        /// <inheritdoc />
+        public IDisposable Subscribe(IMessagesStreamObserver observer)
         {
-            foreach (var writer in _writers)
+            if (observer == null)
             {
-                try
-                {
-                    writer.Write(message, messageContext);
-                }
-                catch (Exception)
-                {
-                    // ignored because we cannot let Log throw any exceptions
-                }
+                throw new ArgumentNullException(nameof(observer));
             }
+
+            return _subject.Subscribe(observer);
         }
     }
 }

@@ -1,18 +1,29 @@
 ﻿using System;
-using System.Diagnostics;
 
 namespace PatchKit.Logging
 {
+    /// <summary>
+    /// Context of logged message.
+    /// </summary>
     public struct MessageContext
     {
-        public MessageContext(StackFrame stackFrame, DateTime dateTime)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageContext"/> struct.
+        /// </summary>
+        public MessageContext(MessageSource source, DateTime dateTime)
         {
-            StackFrame = stackFrame;
+            Source = source;
             DateTime = dateTime;
         }
 
-        public StackFrame StackFrame { get; set; }
+        /// <summary>
+        /// Source.
+        /// </summary>
+        public MessageSource Source { get; }
 
-        public DateTime DateTime { get; set; }
+        /// <summary>
+        /// Time when message was logged.
+        /// </summary>
+        public DateTime DateTime { get; }
     }
 }
