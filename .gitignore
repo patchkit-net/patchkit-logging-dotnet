@@ -4,3 +4,4 @@
 /src/Test/bin/
 /src/packages/
 /src/.idea/
+*.sln.DotSettings.user
