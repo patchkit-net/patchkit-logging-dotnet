@@ -39,7 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultLogStackFrameLocatorTest.cs" />
+    <Compile Include="DefaultMessageSourceStackLocatorTest.cs" />
     <Compile Include="SimpleMessageFormatterTests.cs" />
     <Compile Include="DefaultLoggerTests.cs" />
   </ItemGroup>

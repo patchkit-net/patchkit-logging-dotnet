@@ -1,36 +1,78 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace PatchKit.Logging
 {
+    /// <summary>
+    /// Extensions for <see cref="ILogger"/> interface.
+    /// </summary>
     public static class LoggerExtensions
     {
-        [IgnoreLogStackTrace]
-        public static void Log(this ILogger @this, string description, MessageType type, Exception exception = null)
+        /// <inheritdoc cref="ILogger.Log"/>
+        [IgnoreMessageSourceStack]
+        public static void Log([NotNull] this ILogger @this, string description, MessageType type, Exception exception = null)
         {
+            if (@this == null)
+            {
+                throw new ArgumentNullException(nameof(@this));
+            }
+
             @this.Log(new Message(description, type, exception));
         }
 
-        [IgnoreLogStackTrace]
-        public static void LogTrace(this ILogger @this, string description, Exception exception = null)
+        /// <summary>
+        /// Logs message of <see cref="MessageType.Trace"/> type.
+        /// </summary>
+        [IgnoreMessageSourceStack]
+        public static void LogTrace([NotNull] this ILogger @this, string description, Exception exception = null)
         {
+            if (@this == null)
+            {
+                throw new ArgumentNullException(nameof(@this));
+            }
+
             @this.Log(description, MessageType.Trace, exception);
         }
 
-        [IgnoreLogStackTrace]
-        public static void LogDebug(this ILogger @this, string description, Exception exception = null)
+        /// <summary>
+        /// Logs message of <see cref="MessageType.Debug"/> type.
+        /// </summary>
+        [IgnoreMessageSourceStack]
+        public static void LogDebug([NotNull] this ILogger @this, string description, Exception exception = null)
         {
+            if (@this == null)
+            {
+                throw new ArgumentNullException(nameof(@this));
+            }
+
             @this.Log(description, MessageType.Debug, exception);
         }
 
-        [IgnoreLogStackTrace]
-        public static void LogWarning(this ILogger @this, string description, Exception exception = null)
+        /// <summary>
+        /// Logs message of <see cref="MessageType.Warning"/> type.
+        /// </summary>
+        [IgnoreMessageSourceStack]
+        public static void LogWarning([NotNull] this ILogger @this, string description, Exception exception = null)
         {
+            if (@this == null)
+            {
+                throw new ArgumentNullException(nameof(@this));
+            }
+
             @this.Log(description, MessageType.Warning, exception);
         }
 
-        [IgnoreLogStackTrace]
-        public static void LogError(this ILogger @this, string description, Exception exception = null)
+        /// <summary>
+        /// Logs message of <see cref="MessageType.Error"/> type.
+        /// </summary>
+        [IgnoreMessageSourceStack]
+        public static void LogError([NotNull] this ILogger @this, string description, Exception exception = null)
         {
+            if (@this == null)
+            {
+                throw new ArgumentNullException(nameof(@this));
+            }
+
             @this.Log(description, MessageType.Error, exception);
         }
     }

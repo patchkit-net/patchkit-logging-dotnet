@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using NSubstitute;
-using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
 using PatchKit.Logging;
+// ReSharper disable PossibleNullReferenceException
+// ReSharper disable AssignNullToNotNullAttribute
 
 namespace Test
 {
@@ -12,54 +13,53 @@ namespace Test
     {
         private static DefaultLogger CreateInstance()
         {
-            var logStackFrameLocator = Substitute.For<ILogStackFrameLocator>();
-            logStackFrameLocator.Locate(Arg.Any<StackTrace>()).ReturnsNull();
-            
-            return new DefaultLogger(logStackFrameLocator);
+            var messageSourceStackLocator = Substitute.For<IMessageSourceStackLocator>();
+            messageSourceStackLocator.Locate(Arg.Any<StackTrace>()).Returns(default(MessageSource));
+
+            return new DefaultLogger(messageSourceStackLocator);
         }
 
         [Test]
-        public void Log_ForAnyMessage_AddedWritersAreRequestedToWriteText()
+        public void Log_ForAnyMessage_SubscribersAreReceivingMessage()
         {
-            var logService = CreateInstance();
-            var logWriter = Substitute.For<IMessageWriter>();
+            var logger = CreateInstance();
+            var observer = Substitute.For<IMessagesStreamObserver>();
 
-            logService.AddWriter(logWriter);
+            logger.Subscribe(observer);
 
-            var message = new Message("Test", MessageType.Debug);
+            var message = new Message("Test", MessageType.Debug, null);
+
+            logger.Log(message);
             
-            logService.Log(message);
-            
-            logWriter.Received(1).Write(Arg.Is(message), Arg.Any<MessageContext>());
+            observer.Received(1).OnNext(Arg.Is(message), Arg.Any<MessageContext>());
         }
 
         [Test]
-        public void Log_ForAnyMessage_RemovedWritersAreNotRequestedToWriteText()
+        public void Log_ForAnyMessage_DisposedSubscribersAreNotReceivingMessages()
         {
-            var logService = CreateInstance();
-            var logWriter = Substitute.For<IMessageWriter>();
+            var logger = CreateInstance();
+            var observer = Substitute.For<IMessagesStreamObserver>();
 
-            logService.AddWriter(logWriter);
-            logService.RemoveWriter(logWriter);
+            logger.Subscribe(observer).Dispose();
 
-            logService.Log(new Message("Test", MessageType.Debug));
+            logger.Log(new Message("Test", MessageType.Debug, null));
             
-            logWriter.DidNotReceive().Write(Arg.Any<Message>(), Arg.Any<MessageContext>());
+            observer.DidNotReceive().OnNext(Arg.Any<Message>(), Arg.Any<MessageContext>());
         }
 
         [Test]
-        public void Log_ForAnyMessage_ExceptionCausedByWriterIsNotRethrown()
+        public void Log_ForAnyMessage_ExceptionCausedBySubscriberIsNotRethrown()
         {
-            var logService = CreateInstance();
-            var logWriter = Substitute.For<IMessageWriter>();
+            var logger = CreateInstance();
+            var observer = Substitute.For<IMessagesStreamObserver>();
 
-            logWriter
-                .When(x => x.Write(Arg.Any<Message>(), Arg.Any<MessageContext>()))
-                .Do(x => { throw new Exception(); });
+            observer
+                .When(x => x.OnNext(Arg.Any<Message>(), Arg.Any<MessageContext>()))
+                .Do(x => throw new Exception());
             
-            logService.AddWriter(logWriter);
+            logger.Subscribe(observer);
             
-            Assert.DoesNotThrow(() => logService.Log(new Message("Test", MessageType.Debug)));
+            Assert.DoesNotThrow(() => logger.Log(new Message("Test", MessageType.Debug, null)));
         }
     }
 }
