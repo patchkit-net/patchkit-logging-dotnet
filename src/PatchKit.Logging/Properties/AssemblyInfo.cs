@@ -17,6 +17,6 @@ using PatchKit.Logging.Properties;
 [assembly: ComVisible(false)]
 
 // Based on https://codingforsmarties.wordpress.com/2016/01/21/how-to-version-assemblies-destined-for-nuget/
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyVersion(Version.Major + ".0.0.0")]
 [assembly: AssemblyFileVersion(Version.Major + "." + Version.Minor + "." + Version.Patch + ".0")]
 [assembly: AssemblyInformationalVersion(Version.Major + "." + Version.Minor + "." + Version.Patch + Version.Suffix)]
