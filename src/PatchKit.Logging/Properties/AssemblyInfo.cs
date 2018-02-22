@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+using PatchKit.Logging.Properties;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -15,8 +16,7 @@ using System.Runtime.InteropServices;
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
-#if DEBUG
-[assembly: AssemblyVersion(VersionInfo.Major + "." + VersionInfo.Minor + ".*")]
-#else
-[assembly: AssemblyInformationalVersion(VersionInfo.Major + "." + VersionInfo.Minor + "." + VersionInfo.Patch + VersionInfo.Suffix)]
-#endif
+// Based on https://codingforsmarties.wordpress.com/2016/01/21/how-to-version-assemblies-destined-for-nuget/
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion(Version.Major + "." + Version.Minor + "." + Version.Patch + ".0")]
+[assembly: AssemblyInformationalVersion(Version.Major + "." + Version.Minor + "." + Version.Patch + Version.Suffix)]
